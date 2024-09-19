@@ -1,0 +1,10 @@
+body {
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+#canvas {
+  background-color: #2a5;
+}
