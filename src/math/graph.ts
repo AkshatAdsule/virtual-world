@@ -6,11 +6,25 @@ export class Graph implements Drawable {
   points: Point[];
   segments: Segment[];
 
+  static fromJSON(json: unknown): Graph {
+    const { points: pointsData, segments: segmentsData } = json as Graph;
+
+    const points = pointsData.map((p) => new Point(p.x, p.y));
+    const segments = segmentsData.map(
+      (s) =>
+        new Segment(
+          points.find((p) => p.equals(s.p1))!,
+          points.find((p) => p.equals(s.p2))!
+        )
+    );
+
+    return new Graph(points, segments);
+  }
+
   constructor(points: Point[] = [], segments: Segment[] = []) {
     this.points = points;
     this.segments = segments;
   }
-
   draw(ctx: CanvasRenderingContext2D) {
     for (const segment of this.segments) {
       segment.draw(ctx);

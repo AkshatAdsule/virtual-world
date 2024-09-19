@@ -1,11 +1,13 @@
 import { Graph } from "./math/graph";
 import { Point } from "./primatives/point";
 import { Segment } from "./primatives/segment";
-import { getNearestPoint } from "./utils";
+import { getNearestPoint } from "./math/utils";
+import { ViewPort } from "./viewport";
 
 export class GraphEditor {
   graph: Graph;
   canvas: HTMLCanvasElement;
+  viewPort: ViewPort;
   ctx: CanvasRenderingContext2D;
 
   selectedPoint: Point | null = null;
@@ -27,10 +29,11 @@ export class GraphEditor {
     };
   }
 
-  constructor(graph: Graph, canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
+  constructor(graph: Graph, viewPort: ViewPort) {
+    this.viewPort = viewPort;
+    this.canvas = viewPort.canvas;
+    this.ctx = viewPort.ctx;
     this.graph = graph;
-    this.ctx = canvas.getContext("2d")!;
 
     this.setupEventListeners();
   }
@@ -50,6 +53,13 @@ export class GraphEditor {
     }
   }
 
+  dispose() {
+    this.graph.dispose();
+    this.hoveredPoint = null;
+    this.selectedPoint = null;
+    this.dragging = false;
+  }
+
   // Mouse event handlers
   private onMouseDown(event: MouseEvent) {
     if (event.button == 2) {
@@ -59,7 +69,7 @@ export class GraphEditor {
       } else if (this.hoveredPoint) {
         this.removePoint();
       }
-    } else if (event.button == 0) {
+    } else if (event.button == 0 && !(event.ctrlKey || event.altKey)) {
       if (this.hoveredPoint) {
         this.addSegment(this.hoveredPoint);
         this.selectedPoint = this.hoveredPoint;
@@ -78,12 +88,16 @@ export class GraphEditor {
   }
 
   private onMouseMove(event: MouseEvent) {
-    this.mouse = new Point(event.offsetX, event.offsetY);
+    this.mouse = this.viewPort.getMouse(event, true);
     if (this.dragging && this.selectedPoint) {
       this.selectedPoint.x = this.mouse.x;
       this.selectedPoint.y = this.mouse.y;
     }
-    this.hoveredPoint = getNearestPoint(this.mouse, this.graph.points, 15);
+    this.hoveredPoint = getNearestPoint(
+      this.mouse,
+      this.graph.points,
+      15 * this.viewPort.zoom
+    );
   }
 
   private removePoint() {
