@@ -1,4 +1,4 @@
 export interface Drawable {
-  draw(ctx: CanvasRenderingContext2D, ...opts: any[]): void;
+  draw(ctx: CanvasRenderingContext2D, options?: any): void;
   update?: () => void;
 }

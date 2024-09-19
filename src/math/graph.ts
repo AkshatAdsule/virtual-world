@@ -28,6 +28,7 @@ export class Graph implements Drawable {
   }
 
   removePoint(point: Point) {
+    this.segments = this.segments.filter((s) => !s.includes(point));
     this.points = this.points.filter((p) => p !== point);
   }
 
@@ -41,11 +42,13 @@ export class Graph implements Drawable {
 
   tryAddSegment(segment: Segment): boolean {
     if (this.containsSegment(segment)) return false;
+    if (segment.p1.equals(segment.p2)) return false;
     this.segments.push(segment);
     return true;
   }
 
   removeSegment(segment: Segment) {
+    this.points = this.points.filter((p) => !segment.includes(p));
     this.segments = this.segments.filter((s) => s !== segment);
   }
 
