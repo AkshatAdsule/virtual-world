@@ -4,6 +4,7 @@ import { Point } from "./primatives/point";
 import { Segment } from "./primatives/segment";
 import "./style.css";
 import { ViewPort } from "./viewport";
+import { World } from "./world";
 
 // Setup canvas
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement;
@@ -38,13 +39,15 @@ if (window.localStorage.getItem("graph")) {
   graph = Graph.fromJSON(data);
 }
 
-graph.draw(ctx);
-
 const viewPort = new ViewPort(canvas);
 const graphEditor = new GraphEditor(graph, viewPort);
+const world = new World(graph);
 
 (function animate() {
   viewPort.reset();
+  world.generate();
+  world.draw(ctx);
+  ctx.globalAlpha = 0.3
   graphEditor.display();
   requestAnimationFrame(animate);
 })();

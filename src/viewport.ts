@@ -27,7 +27,9 @@ export class ViewPort {
 
   private setUpEventListeners() {
     // this.canvas.onwheel = this.handleWheel.bind(this);
-    this.canvas.addEventListener("wheel", this.handleWheel.bind(this));
+    this.canvas.addEventListener("wheel", this.handleWheel.bind(this), {
+      passive: true,
+    });
     this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
     this.canvas.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
@@ -72,7 +74,7 @@ export class ViewPort {
   }
 
   getMouse(event: MouseEvent, subtractDragOffset = false): Point {
-    const p =  new Point(
+    const p = new Point(
       (event.offsetX - this.center.x) * this.zoom - this.offset.x,
       (event.offsetY - this.center.y) * this.zoom - this.offset.y
     );
