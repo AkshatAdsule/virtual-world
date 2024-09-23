@@ -24,6 +24,14 @@ export function distance(p1: Point, p2: Point) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
+export function average(p1: Point, p2: Point) {
+  return new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+}
+
+export function dot(p1: Point, p2: Point) {
+  return p1.x * p2.x + p1.y * p2.y;
+}
+
 export function add(p1: Point, p2: Point) {
   return new Point(p1.x + p2.x, p1.y + p2.y);
 }
@@ -32,35 +40,39 @@ export function subtract(p1: Point, p2: Point) {
   return new Point(p1.x - p2.x, p1.y - p2.y);
 }
 
-export function scale(p: Point, factor: number) {
-  return new Point(p.x * factor, p.y * factor);
+export function scale(p: Point, scaler: number) {
+  return new Point(p.x * scaler, p.y * scaler);
 }
 
-export function angleBetween(p1: Point, p2: Point) {
-  return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+export function normalize(p: Point) {
+  return scale(p, 1 / magnitude(p));
 }
 
-export function translate(p: Point, angle: number, offset: number) {
+export function magnitude(p: Point) {
+  return Math.hypot(p.x, p.y);
+}
+
+export function translate(loc: Point, angle: number, offset: number) {
   return new Point(
-    p.x + offset * Math.cos(angle),
-    p.y + offset * Math.sin(angle)
+    loc.x + Math.cos(angle) * offset,
+    loc.y + Math.sin(angle) * offset
   );
 }
 
-interface Intersection {
-  x: number;
-  y: number;
-  offset: number;
+export function angle(p: Point) {
+  return Math.atan2(p.y, p.x);
 }
 
-export function getIntersection(s1: Segment, s2: Segment): Intersection | null {
+export function getIntersection(s1: Segment, p2: Segment) {
   const { p1: a, p2: b } = s1;
-  const { p1: c, p2: d } = s2;
+  const { p1: c, p2: d } = p2;
+
   const tTop = (d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x);
   const uTop = (c.y - a.y) * (a.x - b.x) - (c.x - a.x) * (a.y - b.y);
   const bottom = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
 
-  if (bottom != 0) {
+  const eps = 0.001;
+  if (Math.abs(bottom) > eps) {
     const t = tTop / bottom;
     const u = uTop / bottom;
     if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
@@ -81,9 +93,5 @@ export function lerp(a: number, b: number, t: number) {
 
 export function getRandomColor() {
   const hue = 290 + Math.random() * 260;
-  return `hsl(${hue}, 100%, 50%)`;
-}
-
-export function average(p1: Point, p2: Point) {
-  return new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+  return "hsl(" + hue + ", 100%, 60%)";
 }

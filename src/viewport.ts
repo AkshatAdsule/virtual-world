@@ -5,7 +5,7 @@ export class ViewPort {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
 
-  zoom = 1;
+  zoom = 1.5;
   center: Point;
   offset: Point;
 

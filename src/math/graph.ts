@@ -25,6 +25,7 @@ export class Graph implements Drawable {
     this.points = points;
     this.segments = segments;
   }
+
   draw(ctx: CanvasRenderingContext2D) {
     for (const segment of this.segments) {
       segment.draw(ctx);
@@ -68,6 +69,10 @@ export class Graph implements Drawable {
 
   getSegmentsWithPoint(point: Point): Segment[] {
     return this.segments.filter((s) => s.includes(point));
+  }
+
+  hash(): string {
+    return JSON.stringify(this);
   }
 
   dispose() {

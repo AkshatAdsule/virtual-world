@@ -1,5 +1,5 @@
 import { Polygon } from "../math/polygon";
-import { angleBetween, translate } from "../math/utils";
+import { angle, subtract, translate } from "../math/utils";
 import { Drawable } from "./drawable";
 import { Segment } from "./segment";
 
@@ -17,7 +17,7 @@ export class Envelope implements Drawable {
     this.polygon = this.generatePolygon(width);
   }
 
-  draw(ctx: CanvasRenderingContext2D, { fill = "black" }) {
+  draw(ctx: CanvasRenderingContext2D, { fill = "rgba(0,0,255,0.2)" } = {}) {
     this.polygon.draw(ctx, { fill, stroke: fill });
   }
 
@@ -25,7 +25,7 @@ export class Envelope implements Drawable {
     const { p1, p2 } = this.skeleton;
 
     const radius = width / 2;
-    const alpha = angleBetween(p2, p1);
+    const alpha = angle(subtract(p1, p2));
     const alpha_cw = alpha + Math.PI / 2;
     const alpha_ccw = alpha - Math.PI / 2;
 

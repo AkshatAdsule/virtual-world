@@ -4,6 +4,9 @@ import { Segment } from "../primatives/segment";
 import { average, getIntersection } from "./utils";
 
 export class Polygon implements Drawable {
+  distanceToPoly(poly: Polygon) {
+    return Math.min(...this.points.map((p) => poly.distanceToPoint(p)));
+  }
   points: Point[];
   segments: Segment[];
 
@@ -99,6 +102,21 @@ export class Polygon implements Drawable {
     }
 
     return intersections % 2 === 1;
+  }
+
+  intersectsPoly(polygon: Polygon): boolean {
+    for (const s1 of this.segments) {
+      for (const s2 of polygon.segments) {
+        if (getIntersection(s1, s2)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  distanceToPoint(point: Point): number {
+    return Math.min(...this.segments.map((s) => s.distanceToPoint(point)));
   }
 
   draw(

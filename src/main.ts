@@ -8,8 +8,8 @@ import { World } from "./world";
 
 // Setup canvas
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement;
-canvas.width = 600;
-canvas.height = 600;
+canvas.width = window.innerWidth * 0.9;
+canvas.height = window.innerHeight * 0.85;
 
 // Setup buttons
 const disposeButton = document.getElementById("dispose")! as HTMLButtonElement;
@@ -43,11 +43,16 @@ const viewPort = new ViewPort(canvas);
 const graphEditor = new GraphEditor(graph, viewPort);
 const world = new World(graph);
 
+let oldGraphHash = "";
+
 (function animate() {
   viewPort.reset();
-  world.generate();
+  if (oldGraphHash !== graph.hash()) {
+    world.generate();
+    oldGraphHash = graph.hash();
+  }
   world.draw(ctx);
-  ctx.globalAlpha = 0.3
+  ctx.globalAlpha = 0.3;
   graphEditor.display();
   requestAnimationFrame(animate);
 })();
