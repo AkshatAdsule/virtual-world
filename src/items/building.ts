@@ -1,5 +1,5 @@
 import { Polygon } from "../math/polygon";
-import { add, average, getFake3dPoint, scale, subtract } from "../math/utils";
+import { average, getFake3dPoint } from "../math/utils";
 import { Point } from "../primatives/point";
 import { Item } from "./item";
 

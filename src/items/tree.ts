@@ -1,13 +1,5 @@
 import { Polygon } from "../math/polygon";
-import {
-  add,
-  getFake3dPoint,
-  lerp,
-  lerp2d,
-  scale,
-  subtract,
-  translate,
-} from "../math/utils";
+import { getFake3dPoint, lerp, lerp2d, translate } from "../math/utils";
 import { Point } from "../primatives/point";
 import { Item } from "./item";
 
