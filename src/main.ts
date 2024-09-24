@@ -9,7 +9,7 @@ import { World } from "./world";
 
 // Setup canvas
 const canvas = document.getElementById("canvas")! as HTMLCanvasElement;
-canvas.width = window.innerWidth * 0.9;
+canvas.width = window.innerWidth * 0.975;
 canvas.height = window.innerHeight * 0.85;
 
 // Setup buttons
