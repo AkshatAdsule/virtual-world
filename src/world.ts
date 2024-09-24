@@ -1,3 +1,6 @@
+import { Building } from "./items/building";
+import { Item } from "./items/item";
+import { Tree } from "./items/tree";
 import { Graph } from "./math/graph";
 import { Polygon } from "./math/polygon";
 import { add, distance, lerp, scale } from "./math/utils";
@@ -18,9 +21,9 @@ export class World implements Drawable {
 
   envelopes: Envelope[] = [];
   roadBorders: Segment[] = [];
-  buildings: Polygon[] = [];
+  buildings: Building[] = [];
 
-  trees: Point[] = [];
+  trees: Tree[] = [];
   treeSize: number;
 
   constructor(
@@ -59,7 +62,7 @@ export class World implements Drawable {
     this.trees = this.generateTrees();
   }
 
-  private generateBuildings(): Polygon[] {
+  private generateBuildings(): Building[] {
     const tmpEvelopes = this.graph.segments.map(
       (s) =>
         new Envelope(
@@ -111,15 +114,15 @@ export class World implements Drawable {
       }
     }
 
-    return bases;
+    return bases.map((b) => new Building(b));
   }
 
-  private generateTrees(): Point[] {
-    const trees: Point[] = [];
+  private generateTrees(): Tree[] {
+    const trees: Tree[] = [];
     // find building that has the least y value
     const points: Point[] = [
       ...this.roadBorders.map((s) => [s.p1, s.p2] as [Point, Point]).flat(),
-      ...this.buildings.map((b) => b.points).flat(),
+      ...this.buildings.map((b) => b.base.points).flat(),
     ];
 
     const padding = 0;
@@ -133,7 +136,7 @@ export class World implements Drawable {
     let tryCount = 0;
 
     const illegalPolygons = [
-      ...this.buildings,
+      ...this.buildings.map((b) => b.base),
       ...this.envelopes.map((e) => e.polygon),
     ];
 
@@ -156,7 +159,7 @@ export class World implements Drawable {
 
       if (keep) {
         for (const tree of trees) {
-          if (distance(tree, p) < this.treeSize) {
+          if (distance(tree.center, p) < this.treeSize) {
             keep = false;
             break;
           }
@@ -176,14 +179,14 @@ export class World implements Drawable {
 
       if (keep) {
         tryCount = 0;
-        trees.push(p);
+        trees.push(new Tree(p, this.treeSize));
       }
     }
 
     return trees;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, viewpoint: Point) {
     for (const envelope of this.envelopes) {
       envelope.draw(ctx, { fill: "#bbb" });
     }
@@ -196,12 +199,14 @@ export class World implements Drawable {
       border.draw(ctx, { color: "white", width: 4 });
     }
 
-    for (const building of this.buildings) {
-      building.draw(ctx);
-    }
+    const items: Item[] = [...this.buildings, ...this.trees];
+    items.sort(
+      (a, b) =>
+        b.base.distanceToPoint(viewpoint) - a.base.distanceToPoint(viewpoint)
+    );
 
-    for (const tree of this.trees) {
-      tree.draw(ctx, { color: "green", size: this.treeSize });
+    for (const item of items) {
+      item.draw(ctx, viewpoint);
     }
   }
 }

@@ -20,6 +20,8 @@ export function getNearestPoint(
   return nearestPoint!;
 }
 
+export type point = { x: number; y: number };
+
 export function distance(p1: Point, p2: Point) {
   return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
@@ -32,7 +34,7 @@ export function dot(p1: Point, p2: Point) {
   return p1.x * p2.x + p1.y * p2.y;
 }
 
-export function add(p1: Point, p2: Point) {
+export function add(p1: Point, p2: Point | point) {
   return new Point(p1.x + p2.x, p1.y + p2.y);
 }
 
@@ -91,7 +93,18 @@ export function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+export function lerp2d(a: Point, b: Point, t: number) {
+  return new Point(lerp(a.x, b.x, t), lerp(a.y, b.y, t));
+}
+
 export function getRandomColor() {
   const hue = 290 + Math.random() * 260;
   return "hsl(" + hue + ", 100%, 60%)";
+}
+
+export function getFake3dPoint(point: Point, viewPoint: Point, height: number) {
+  const dir = normalize(subtract(point, viewPoint));
+  const dist = distance(point, viewPoint);
+  const scaler = Math.atan(dist / 300) / (Math.PI / 2);
+  return add(point, scale(dir, height * scaler));
 }

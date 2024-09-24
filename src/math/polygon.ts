@@ -121,21 +121,28 @@ export class Polygon implements Drawable {
 
   draw(
     ctx: CanvasRenderingContext2D,
-    { stroke = "blue", lineWidth = 2, fill = "rgba(0,0,255, 0.3)" } = {}
+    {
+      stroke = "blue",
+      lineWidth = 2,
+      fill = "rgba(0,0,255, 0.3)",
+      join = "miter",
+    }: {
+      stroke?: string;
+      lineWidth?: number;
+      fill?: string;
+      join?: CanvasLineJoin;
+    } = {}
   ) {
     ctx.beginPath();
+    ctx.fillStyle = fill;
     ctx.strokeStyle = stroke;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = fill;
-
-    if (this.points.length === 0) return;
-
+    ctx.lineJoin = join;
     ctx.moveTo(this.points[0].x, this.points[0].y);
     for (let i = 1; i < this.points.length; i++) {
       ctx.lineTo(this.points[i].x, this.points[i].y);
     }
     ctx.closePath();
-
     ctx.fill();
     ctx.stroke();
   }

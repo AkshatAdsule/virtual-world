@@ -1,5 +1,6 @@
 import { GraphEditor } from "./graphEditor";
 import { Graph } from "./math/graph";
+import { scale } from "./math/utils";
 import { Point } from "./primatives/point";
 import { Segment } from "./primatives/segment";
 import "./style.css";
@@ -51,7 +52,8 @@ let oldGraphHash = "";
     world.generate();
     oldGraphHash = graph.hash();
   }
-  world.draw(ctx);
+  const viewPoint = scale(viewPort.getOffset(), -1);
+  world.draw(ctx, viewPoint);
   ctx.globalAlpha = 0.3;
   graphEditor.display();
   requestAnimationFrame(animate);

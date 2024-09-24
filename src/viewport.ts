@@ -73,6 +73,10 @@ export class ViewPort {
     }
   }
 
+  getOffset() {
+    return add(this.offset, this.drag.offset);
+  }
+
   getMouse(event: MouseEvent, subtractDragOffset = false): Point {
     const p = new Point(
       (event.offsetX - this.center.x) * this.zoom - this.offset.x,
