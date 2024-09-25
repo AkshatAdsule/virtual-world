@@ -4,7 +4,7 @@ import { Segment } from "../primatives/segment";
 export function getNearestPoint(
   point: Point,
   points: Point[],
-  treshold = Number.MAX_SAFE_INTEGER
+  treshold = Number.MAX_SAFE_INTEGER,
 ): Point | null {
   let minDist = Number.MAX_SAFE_INTEGER;
   let nearestPoint = null;
@@ -18,6 +18,21 @@ export function getNearestPoint(
   }
 
   return nearestPoint!;
+}
+
+export function getNearestSegment(
+  point: Point,
+  segments: Segment[],
+  treshold = Number.MAX_SAFE_INTEGER,
+): Segment | null {
+  let nearestSegment = segments.reduce((prev, curr) =>
+    prev.distanceToPoint(point) < curr.distanceToPoint(point) ? prev : curr,
+  );
+
+  if (nearestSegment.distanceToPoint(point) < treshold) {
+    return nearestSegment;
+  }
+  return null;
 }
 
 export type point = { x: number; y: number };
@@ -57,12 +72,16 @@ export function magnitude(p: Point) {
 export function translate(loc: Point, angle: number, offset: number) {
   return new Point(
     loc.x + Math.cos(angle) * offset,
-    loc.y + Math.sin(angle) * offset
+    loc.y + Math.sin(angle) * offset,
   );
 }
 
 export function angle(p: Point) {
   return Math.atan2(p.y, p.x);
+}
+
+export function perpendicular(p: Point): Point {
+  return new Point(-p.y, p.x);
 }
 
 export function getIntersection(s1: Segment, p2: Segment) {

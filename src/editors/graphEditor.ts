@@ -1,10 +1,11 @@
-import { Graph } from "./math/graph";
-import { Point } from "./primatives/point";
-import { Segment } from "./primatives/segment";
-import { getNearestPoint } from "./math/utils";
-import { ViewPort } from "./viewport";
+import { Graph } from "../math/graph";
+import { Point } from "../primatives/point";
+import { Segment } from "../primatives/segment";
+import { getNearestPoint } from "../math/utils";
+import { ViewPort } from "../viewport";
+import { Drawable } from "../primatives/drawable";
 
-export class GraphEditor {
+export class GraphEditor implements Drawable {
   graph: Graph;
   canvas: HTMLCanvasElement;
   viewPort: ViewPort;
@@ -16,17 +17,28 @@ export class GraphEditor {
 
   dragging = false;
 
+  // event listener handles
+  private mouseDownHandler: (event: MouseEvent) => void = () => {};
+  private mouseUpHandler: (event: MouseEvent) => void = () => {};
+  private mouseMoveHandler: (event: MouseEvent) => void = () => {};
+
   private setupEventListeners() {
-    this.canvas.onmousedown = this.onMouseDown.bind(this);
+    this.mouseDownHandler = this.onMouseDown.bind(this);
+    this.mouseUpHandler = this.onMouseUp.bind(this);
+    this.mouseMoveHandler = this.onMouseMove.bind(this);
+    this.canvas.addEventListener("mousedown", this.mouseDownHandler);
+    this.canvas.addEventListener("mouseup", this.mouseUpHandler);
+    this.canvas.addEventListener("mousemove", this.mouseMoveHandler);
+  }
 
-    this.canvas.onmouseup = this.onMouseUp.bind(this);
+  private removeEventListeners() {
+    this.canvas.removeEventListener("mousedown", this.mouseDownHandler);
+    this.canvas.removeEventListener("mouseup", this.mouseUpHandler);
+    this.canvas.removeEventListener("mousemove", this.mouseMoveHandler);
 
-    this.canvas.onmousemove = this.onMouseMove.bind(this);
-
-    // Disable right click context menu
-    this.canvas.oncontextmenu = (event) => {
-      event.preventDefault();
-    };
+    this.selectedPoint = null;
+    this.hoveredPoint = null;
+    this.dragging = false;
   }
 
   constructor(graph: Graph, viewPort: ViewPort) {
@@ -34,11 +46,17 @@ export class GraphEditor {
     this.canvas = viewPort.canvas;
     this.ctx = viewPort.ctx;
     this.graph = graph;
+  }
 
+  enable() {
     this.setupEventListeners();
   }
 
-  display() {
+  disable() {
+    this.removeEventListeners();
+  }
+
+  draw(_: CanvasRenderingContext2D) {
     this.graph.draw(this.ctx);
     if (this.selectedPoint) {
       const intent = this.hoveredPoint ? this.hoveredPoint : this.mouse;
@@ -96,7 +114,7 @@ export class GraphEditor {
     this.hoveredPoint = getNearestPoint(
       this.mouse,
       this.graph.points,
-      15 * this.viewPort.zoom
+      15 * this.viewPort.zoom,
     );
   }
 

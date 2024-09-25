@@ -25,11 +25,18 @@ export class Segment implements Drawable {
       width = 2,
       color = "black",
       dash = [],
-    }: { width?: number; color?: string; dash?: number[] } = {}
+      cap = "butt",
+    }: {
+      width?: number;
+      color?: string;
+      dash?: number[];
+      cap?: CanvasLineCap;
+    } = {},
   ) {
     ctx.beginPath();
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
+    ctx.lineCap = cap;
     ctx.setLineDash(dash);
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
