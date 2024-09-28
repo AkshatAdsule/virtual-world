@@ -1,3 +1,4 @@
+import { Graph } from "../math/graph";
 import {
   add,
   distance,
@@ -19,6 +20,20 @@ export class Segment implements Drawable {
     this.p2 = p2;
   }
 
+  static decode(data: any, graph: Graph): Segment {
+    return new Segment(
+      graph.getPointById(data.p1)!,
+      graph.getPointById(data.p2)!
+    );
+  }
+
+  get serialized(): object {
+    return {
+      p1: this.p1.id,
+      p2: this.p2.id,
+    };
+  }
+
   draw(
     ctx: CanvasRenderingContext2D,
     {
@@ -31,7 +46,7 @@ export class Segment implements Drawable {
       color?: string;
       dash?: number[];
       cap?: CanvasLineCap;
-    } = {},
+    } = {}
   ) {
     ctx.beginPath();
     ctx.lineWidth = width;

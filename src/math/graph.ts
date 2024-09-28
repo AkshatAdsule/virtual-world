@@ -6,10 +6,10 @@ export class Graph implements Drawable {
   points: Point[];
   segments: Segment[];
 
-  static fromJSON(json: unknown): Graph {
+  static decode(json: unknown): Graph {
     const { points: pointsData, segments: segmentsData } = json as Graph;
 
-    const points = pointsData.map((p) => new Point(p.x, p.y));
+    const points = pointsData.map((p) => new Point(p.x, p.y, p.id));
     const segments = segmentsData.map(
       (s) =>
         new Segment(
@@ -24,6 +24,10 @@ export class Graph implements Drawable {
   constructor(points: Point[] = [], segments: Segment[] = []) {
     this.points = points;
     this.segments = segments;
+  }
+
+  getPointById(id: string): Point | undefined {
+    return this.points.find((p) => p.id === id);
   }
 
   draw(ctx: CanvasRenderingContext2D) {

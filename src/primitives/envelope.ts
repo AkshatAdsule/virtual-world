@@ -1,3 +1,4 @@
+import { Graph } from "../math/graph";
 import { Polygon } from "../math/polygon";
 import { angle, subtract, translate } from "../math/utils";
 import { Drawable } from "./drawable";
@@ -15,6 +16,19 @@ export class Envelope implements Drawable {
     this.width = width;
     this.roundness = roundness;
     this.polygon = this.generatePolygon(width);
+  }
+
+  static decode(data: any, graph: Graph): Envelope {
+    const { skeleton, width, roundness } = data;
+    return new Envelope(Segment.decode(skeleton, graph), width, roundness);
+  }
+
+  get serialized(): object {
+    return {
+      skeleton: this.skeleton.serialized,
+      width: this.width,
+      roundness: this.roundness,
+    };
   }
 
   draw(ctx: CanvasRenderingContext2D, { fill = "rgba(0,0,255,0.2)" } = {}) {

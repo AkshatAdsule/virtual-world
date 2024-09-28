@@ -1,6 +1,7 @@
 import { Building } from "./items/building";
 import { Item } from "./items/item";
 import { Tree } from "./items/tree";
+import { decodeMarking } from "./markings/helper";
 import { Light } from "./markings/light";
 import { Marking } from "./markings/marking";
 import { Graph } from "./math/graph";
@@ -56,6 +57,63 @@ export class World implements Drawable {
     this.generate();
   }
 
+  static decode(data: any): World {
+    const graph = Graph.decode(data.graph);
+    const world = new World(graph);
+
+    // primitives
+    world.roadWidth = data.roadWidth;
+    world.roadRoundness = data.roadRoundness;
+
+    world.buildingWidth = data.buildingWidth;
+    world.buildingMinLength = data.buildingMinLength;
+    world.spacing = data.spacing;
+
+    // items
+    world.envelopes = data.envelopes.map((e: any) => Envelope.decode(e, graph));
+    world.roadBorders = data.roadBorders.map((s: any) =>
+      Segment.decode(s, graph)
+    );
+    world.buildings = data.buildings.map((b: any) => Building.decode(b, graph));
+
+    world.trees = data.trees.map((t: any) => Tree.decode(t));
+    world.treeSize = data.treeSize;
+
+    world.laneGuides = data.laneGuides.map((s: any) =>
+      Segment.decode(s, graph)
+    );
+
+    world.markings = data.markings.map((m: any) => decodeMarking(m));
+
+    return world;
+  }
+
+  get serialized(): object {
+    this.markings.map((m) => m.serialized);
+    return {
+      graph: this.graph,
+
+      // primitives
+      roadWidth: this.roadWidth,
+      roadRoundness: this.roadRoundness,
+
+      buildingWidth: this.buildingWidth,
+      buildingMinLength: this.buildingMinLength,
+      spacing: this.spacing,
+
+      envelopes: this.envelopes.map((e) => e.serialized),
+      roadBorders: this.roadBorders.map((s) => s.serialized),
+      buildings: this.buildings.map((b) => b.serialized),
+
+      trees: this.trees.map((t) => t.serialized),
+      treeSize: this.treeSize,
+
+      laneGuides: this.laneGuides.map((s) => s.serialized),
+
+      markings: this.markings.map((m) => m.serialized),
+    };
+  }
+
   generate() {
     this.envelopes.length = 0;
 
@@ -74,7 +132,7 @@ export class World implements Drawable {
   }
 
   private generateBuildings(): Building[] {
-    const tmpEvelopes = this.graph.segments.map(
+    const tmpEnvelopes = this.graph.segments.map(
       (s) =>
         new Envelope(
           s,
@@ -83,7 +141,7 @@ export class World implements Drawable {
         )
     );
 
-    const guides = Polygon.union(tmpEvelopes.map((e) => e.polygon)).filter(
+    const guides = Polygon.union(tmpEnvelopes.map((e) => e.polygon)).filter(
       (g) => g.length() > this.buildingMinLength
     );
 
@@ -198,11 +256,11 @@ export class World implements Drawable {
   }
 
   private generateLaneGuides(): Segment[] {
-    const tmpEvelopes = this.graph.segments.map(
+    const tmpEnvelopes = this.graph.segments.map(
       (s) => new Envelope(s, this.roadWidth / 2, this.roadRoundness)
     );
 
-    const segments = Polygon.union(tmpEvelopes.map((env) => env.polygon));
+    const segments = Polygon.union(tmpEnvelopes.map((env) => env.polygon));
 
     return segments;
   }

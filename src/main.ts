@@ -2,8 +2,6 @@ import { GraphEditor } from "./editors/graphEditor";
 import { StopEditor } from "./editors/stopEditor";
 import { Graph } from "./math/graph";
 import { scale } from "./math/utils";
-import { Point } from "./primitives/point";
-import { Segment } from "./primitives/segment";
 import { ViewPort } from "./viewport";
 import { World } from "./world";
 
@@ -40,7 +38,7 @@ disposeButton.onclick = () => {
 };
 const saveButton = document.getElementById("save")! as HTMLButtonElement;
 saveButton.onclick = () => {
-  window.localStorage.setItem("graph", JSON.stringify(graph));
+  window.localStorage.setItem("world", JSON.stringify(world.serialized));
 };
 
 const graphButton = document.getElementById("graphBtn")! as HTMLButtonElement;
@@ -93,26 +91,15 @@ function disableEditors() {
   }
 }
 
+let world = new World(new Graph());
+if (window.localStorage.getItem("world")) {
+  world = World.decode(JSON.parse(window.localStorage.getItem("world")!));
+}
+const graph = world.graph;
+
 const ctx = canvas.getContext("2d")!;
 
-const p1 = new Point(200, 200);
-const p2 = new Point(500, 200);
-const p3 = new Point(400, 400);
-const p4 = new Point(100, 300);
-
-const s1 = new Segment(p1, p2);
-const s2 = new Segment(p1, p3);
-const s3 = new Segment(p1, p4);
-const s4 = new Segment(p2, p3);
-
-let graph = new Graph([p1, p2, p3, p4], [s1, s2, s3, s4]);
-if (window.localStorage.getItem("graph")) {
-  const data = JSON.parse(window.localStorage.getItem("graph")!);
-  graph = Graph.fromJSON(data);
-}
-
 const viewPort = new ViewPort(canvas);
-const world = new World(graph);
 
 const graphEditor = new GraphEditor(graph, viewPort);
 const stopEditor = new StopEditor(viewPort, world);

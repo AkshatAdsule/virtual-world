@@ -1,3 +1,4 @@
+import { Graph } from "../math/graph";
 import { Polygon } from "../math/polygon";
 import { average, getFake3dPoint } from "../math/utils";
 import { Point } from "../primitives/point";
@@ -10,6 +11,17 @@ export class Building implements Item {
   constructor(base: Polygon, height = 200) {
     this.base = base;
     this.height = height;
+  }
+
+  static decode(data: any, graph: Graph): Building {
+    return new Building(Polygon.decode(data.base, graph), data.height);
+  }
+
+  get serialized(): object {
+    return {
+      base: this.base.serialized,
+      height: this.height,
+    };
   }
 
   draw(ctx: CanvasRenderingContext2D, viewpoint: Point) {

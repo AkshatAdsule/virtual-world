@@ -4,9 +4,21 @@ export class Point implements Drawable {
   x: number;
   y: number;
 
-  constructor(x: number, y: number) {
+  id: string;
+
+  constructor(x: number, y: number, id?: string) {
     this.x = x;
     this.y = y;
+
+    this.id = id || crypto.randomUUID();
+  }
+
+  get serialized(): object {
+    return this;
+  }
+
+  static decode(data: any): Point {
+    return new Point(data.x, data.y, data.id);
   }
 
   draw(

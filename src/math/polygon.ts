@@ -1,6 +1,7 @@
 import { Drawable } from "../primitives/drawable";
 import { Point } from "../primitives/point";
 import { Segment } from "../primitives/segment";
+import { Graph } from "./graph";
 import { average, getIntersection } from "./utils";
 
 export class Polygon implements Drawable {
@@ -80,6 +81,17 @@ export class Polygon implements Drawable {
         new Segment(points[i], points[(i + 1) % points.length])
       );
     }
+  }
+
+  static decode(data: any, graph: Graph): Polygon {
+    const points = data.points.map((p: any) => graph.getPointById(p)!);
+    return new Polygon(points);
+  }
+
+  get serialized(): object {
+    return {
+      points: this.points.map((p) => p.serialized),
+    };
   }
 
   containsSegment(segment: Segment): boolean {

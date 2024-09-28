@@ -30,6 +30,13 @@ export abstract class Marking implements Drawable {
     this.poly = new Envelope(this.support, width, 0).polygon;
   }
 
+  get serialized(): object {
+    return {
+      type: this.constructor.name,
+      ...this,
+    };
+  }
+
   draw(ctx: CanvasRenderingContext2D) {
     console.warn("draw not implemented");
     this.poly.draw(ctx);

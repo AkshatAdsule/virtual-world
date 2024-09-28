@@ -16,6 +16,18 @@ export class Tree implements Item {
     this.base = new Polygon([]);
   }
 
+  static decode(data: any): Tree {
+    return new Tree(Point.decode(data.center), data.size, data.height);
+  }
+
+  get serialized(): object {
+    return {
+      center: this.center.serialized,
+      size: this.size,
+      height: this.height,
+    };
+  }
+
   draw(ctx: CanvasRenderingContext2D, viewpoint: Point) {
     const top = getFake3dPoint(this.center, viewpoint, this.height);
 
