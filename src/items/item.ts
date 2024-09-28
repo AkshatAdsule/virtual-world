@@ -1,6 +1,6 @@
 import { Polygon } from "../math/polygon";
-import { Drawable } from "../primatives/drawable";
-import { Point } from "../primatives/point";
+import { Drawable } from "../primitives/drawable";
+import { Point } from "../primitives/point";
 
 export interface Item extends Drawable {
   get base(): Polygon;

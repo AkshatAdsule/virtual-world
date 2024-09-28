@@ -1,6 +1,6 @@
-import { Drawable } from "../primatives/drawable";
-import { Point } from "../primatives/point";
-import { Segment } from "../primatives/segment";
+import { Drawable } from "../primitives/drawable";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { average, getIntersection } from "./utils";
 
 export class Polygon implements Drawable {

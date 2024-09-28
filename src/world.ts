@@ -6,10 +6,10 @@ import { Marking } from "./markings/marking";
 import { Graph } from "./math/graph";
 import { Polygon } from "./math/polygon";
 import { add, distance, getNearestPoint, lerp, scale } from "./math/utils";
-import { Drawable } from "./primatives/drawable";
-import { Envelope } from "./primatives/envelope";
-import { Point } from "./primatives/point";
-import { Segment } from "./primatives/segment";
+import { Drawable } from "./primitives/drawable";
+import { Envelope } from "./primitives/envelope";
+import { Point } from "./primitives/point";
+import { Segment } from "./primitives/segment";
 
 export class World implements Drawable {
   graph: Graph;
@@ -41,7 +41,7 @@ export class World implements Drawable {
     buildingWidth = 150,
     buildingMinLength = 150,
     spacing = 50,
-    treeSize = 160,
+    treeSize = 160
   ) {
     this.graph = graph;
     this.roadWidth = roadWith;
@@ -61,7 +61,7 @@ export class World implements Drawable {
 
     for (const segment of this.graph.segments) {
       this.envelopes.push(
-        new Envelope(segment, this.roadWidth, this.roadRoundness),
+        new Envelope(segment, this.roadWidth, this.roadRoundness)
       );
     }
 
@@ -79,19 +79,19 @@ export class World implements Drawable {
         new Envelope(
           s,
           this.roadWidth + this.buildingWidth + this.spacing * 2,
-          this.roadRoundness,
-        ),
+          this.roadRoundness
+        )
     );
 
     const guides = Polygon.union(tmpEvelopes.map((e) => e.polygon)).filter(
-      (g) => g.length() > this.buildingMinLength,
+      (g) => g.length() > this.buildingMinLength
     );
 
     const supports: Segment[] = [];
     for (const guide of guides) {
       const len = guide.length() + this.spacing;
       const buildingCount = Math.floor(
-        len / (this.buildingMinLength + this.spacing),
+        len / (this.buildingMinLength + this.spacing)
       );
       const buildingLength = len / buildingCount - this.spacing;
 
@@ -109,7 +109,7 @@ export class World implements Drawable {
     }
 
     const bases = supports.map(
-      (s) => new Envelope(s, this.buildingWidth).polygon,
+      (s) => new Envelope(s, this.buildingWidth).polygon
     );
 
     const eps = 0.001;
@@ -154,7 +154,7 @@ export class World implements Drawable {
     while (tryCount++ < tries) {
       const p = new Point(
         lerp(left, right, Math.random()),
-        lerp(top, bottom, Math.random()),
+        lerp(top, bottom, Math.random())
       );
 
       let keep = true;
@@ -199,7 +199,7 @@ export class World implements Drawable {
 
   private generateLaneGuides(): Segment[] {
     const tmpEvelopes = this.graph.segments.map(
-      (s) => new Envelope(s, this.roadWidth / 2, this.roadRoundness),
+      (s) => new Envelope(s, this.roadWidth / 2, this.roadRoundness)
     );
 
     const segments = Polygon.union(tmpEvelopes.map((env) => env.polygon));
@@ -247,7 +247,7 @@ export class World implements Drawable {
     for (const center of controlCenters) {
       const cTick = tick % center.ticks;
       const greenYellowIndex = Math.floor(
-        cTick / (greenDuration + yellowDuration),
+        cTick / (greenDuration + yellowDuration)
       );
       const greenYellowState =
         cTick % (greenDuration + yellowDuration) < greenDuration
@@ -295,7 +295,7 @@ export class World implements Drawable {
     const items: Item[] = [...this.buildings, ...this.trees];
     items.sort(
       (a, b) =>
-        b.base.distanceToPoint(viewpoint) - a.base.distanceToPoint(viewpoint),
+        b.base.distanceToPoint(viewpoint) - a.base.distanceToPoint(viewpoint)
     );
 
     for (const item of items) {

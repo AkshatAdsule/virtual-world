@@ -1,6 +1,6 @@
 import { Polygon } from "../math/polygon";
 import { getFake3dPoint, lerp, lerp2d, translate } from "../math/utils";
-import { Point } from "../primatives/point";
+import { Point } from "../primitives/point";
 import { Item } from "./item";
 
 export class Tree implements Item {

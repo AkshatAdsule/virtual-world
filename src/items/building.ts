@@ -1,6 +1,6 @@
 import { Polygon } from "../math/polygon";
 import { average, getFake3dPoint } from "../math/utils";
-import { Point } from "../primatives/point";
+import { Point } from "../primitives/point";
 import { Item } from "./item";
 
 export class Building implements Item {

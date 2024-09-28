@@ -1,9 +1,9 @@
 import { Graph } from "../math/graph";
-import { Point } from "../primatives/point";
-import { Segment } from "../primatives/segment";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { getNearestPoint } from "../math/utils";
 import { ViewPort } from "../viewport";
-import { Drawable } from "../primatives/drawable";
+import { Drawable } from "../primitives/drawable";
 
 export class GraphEditor implements Drawable {
   graph: Graph;
@@ -114,7 +114,7 @@ export class GraphEditor implements Drawable {
     this.hoveredPoint = getNearestPoint(
       this.mouse,
       this.graph.points,
-      15 * this.viewPort.zoom,
+      15 * this.viewPort.zoom
     );
   }
 

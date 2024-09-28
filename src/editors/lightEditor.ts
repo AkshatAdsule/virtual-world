@@ -1,5 +1,5 @@
 import { Light } from "../markings/light";
-import { Point } from "../primatives/point";
+import { Point } from "../primitives/point";
 import { MarkingEditor } from "./markingEditor";
 
 export class LightEditor extends MarkingEditor<Light> {
@@ -12,7 +12,7 @@ export class LightEditor extends MarkingEditor<Light> {
       center,
       direction,
       this.world.roadWidth / 2,
-      this.world.roadWidth / 2,
+      this.world.roadWidth / 2
     );
   }
 }

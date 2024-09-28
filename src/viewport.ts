@@ -1,5 +1,5 @@
 import { add, subtract, scale } from "./math/utils";
-import { Point } from "./primatives/point";
+import { Point } from "./primitives/point";
 
 export class ViewPort {
   canvas: HTMLCanvasElement;

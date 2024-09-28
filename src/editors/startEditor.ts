@@ -1,6 +1,6 @@
 import { MarkingEditor } from "../editors/markingEditor";
 import { Start } from "../markings/start";
-import { Point } from "../primatives/point";
+import { Point } from "../primitives/point";
 
 export class StartEditor extends MarkingEditor<Start> {
   get targetSegments() {
@@ -12,7 +12,7 @@ export class StartEditor extends MarkingEditor<Start> {
       center,
       direction,
       this.world.roadWidth / 2,
-      this.world.roadWidth / 2,
+      this.world.roadWidth / 2
     );
   }
 }

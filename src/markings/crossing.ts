@@ -1,5 +1,5 @@
 import { add, scale, perpendicular } from "../math/utils";
-import { Segment } from "../primatives/segment";
+import { Segment } from "../primitives/segment";
 import { Marking } from "./marking";
 
 export class Crossing extends Marking {
@@ -11,7 +11,7 @@ export class Crossing extends Marking {
     const perp = perpendicular(this.direction);
     const line = new Segment(
       add(this.center, scale(perp, this.width / 2)),
-      add(this.center, scale(perp, -this.width / 2)),
+      add(this.center, scale(perp, -this.width / 2))
     );
 
     line.draw(ctx, { width: this.height, color: "white", dash: [11, 11] });

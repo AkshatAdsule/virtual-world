@@ -1,6 +1,6 @@
 import { angle } from "../math/utils";
-import { Point } from "../primatives/point";
-import { Segment } from "../primatives/segment";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { Marking } from "./marking";
 
 export class Start extends Marking {

@@ -1,8 +1,8 @@
 import { Marking } from "../markings/marking";
 import { getNearestSegment } from "../math/utils";
-import { Drawable } from "../primatives/drawable";
-import { Point } from "../primatives/point";
-import { Segment } from "../primatives/segment";
+import { Drawable } from "../primitives/drawable";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 import { ViewPort } from "../viewport";
 import { World } from "../world";
 
@@ -47,11 +47,11 @@ export abstract class MarkingEditor<M extends Marking> implements Drawable {
   removeEventListeners() {
     this.viewport.canvas.removeEventListener(
       "mousedown",
-      this.mouseDownHandler,
+      this.mouseDownHandler
     );
     this.viewport.canvas.removeEventListener(
       "mousemove",
-      this.mouseMoveHandler,
+      this.mouseMoveHandler
     );
   }
 
@@ -87,7 +87,7 @@ export abstract class MarkingEditor<M extends Marking> implements Drawable {
     const seg = getNearestSegment(
       this.mouse,
       this.targetSegments,
-      10 * this.viewport.zoom,
+      10 * this.viewport.zoom
     );
 
     if (seg) {

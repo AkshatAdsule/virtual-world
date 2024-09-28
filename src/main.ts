@@ -2,8 +2,8 @@ import { GraphEditor } from "./editors/graphEditor";
 import { StopEditor } from "./editors/stopEditor";
 import { Graph } from "./math/graph";
 import { scale } from "./math/utils";
-import { Point } from "./primatives/point";
-import { Segment } from "./primatives/segment";
+import { Point } from "./primitives/point";
+import { Segment } from "./primitives/segment";
 import { ViewPort } from "./viewport";
 import { World } from "./world";
 
@@ -54,7 +54,7 @@ stopButton.onclick = () => {
 };
 
 const crossingButton = document.getElementById(
-  "crossingBtn",
+  "crossingBtn"
 )! as HTMLButtonElement;
 crossingButton.onclick = () => {
   setMode("crossing");
@@ -66,7 +66,7 @@ targetBtn.onclick = () => {
 };
 
 const startStopButton = document.getElementById(
-  "startBtn",
+  "startBtn"
 )! as HTMLButtonElement;
 startStopButton.onclick = () => {
   setMode("startStop");

@@ -1,9 +1,9 @@
 import { Polygon } from "../math/polygon";
 import { angle, translate } from "../math/utils";
-import { Drawable } from "../primatives/drawable";
-import { Envelope } from "../primatives/envelope";
-import { Point } from "../primatives/point";
-import { Segment } from "../primatives/segment";
+import { Drawable } from "../primitives/drawable";
+import { Envelope } from "../primitives/envelope";
+import { Point } from "../primitives/point";
+import { Segment } from "../primitives/segment";
 
 export abstract class Marking implements Drawable {
   center: Point;
@@ -24,7 +24,7 @@ export abstract class Marking implements Drawable {
 
     this.support = new Segment(
       translate(center, angle(direction), height / 2),
-      translate(center, angle(direction), -height / 2),
+      translate(center, angle(direction), -height / 2)
     );
 
     this.poly = new Envelope(this.support, width, 0).polygon;
