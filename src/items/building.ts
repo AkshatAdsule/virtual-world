@@ -1,4 +1,3 @@
-import { Graph } from "../math/graph";
 import { Polygon } from "../math/polygon";
 import { average, getFake3dPoint } from "../math/utils";
 import { Point } from "../primitives/point";
@@ -13,8 +12,8 @@ export class Building implements Item {
     this.height = height;
   }
 
-  static decode(data: any, graph: Graph): Building {
-    return new Building(Polygon.decode(data.base, graph), data.height);
+  static decode(data: any): Building {
+    return new Building(Polygon.decode(data.base), data.height);
   }
 
   get serialized(): object {

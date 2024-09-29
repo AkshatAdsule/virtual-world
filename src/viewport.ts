@@ -25,6 +25,20 @@ export class ViewPort {
     this.setUpEventListeners();
   }
 
+  static decode(data: any, canvas: HTMLCanvasElement): ViewPort {
+    const viewPort = new ViewPort(canvas);
+    viewPort.zoom = data.zoom;
+    viewPort.offset = Point.decode(data.offset);
+    return viewPort;
+  }
+
+  get serialized(): object {
+    return {
+      zoom: this.zoom,
+      offset: this.offset.serialized,
+    };
+  }
+
   private setUpEventListeners() {
     // this.canvas.onwheel = this.handleWheel.bind(this);
     this.canvas.addEventListener("wheel", this.handleWheel.bind(this), {

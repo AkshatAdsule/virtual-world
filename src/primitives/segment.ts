@@ -20,10 +20,16 @@ export class Segment implements Drawable {
     this.p2 = p2;
   }
 
-  static decode(data: any, graph: Graph): Segment {
+  static decode(data: any, graph?: Graph): Segment {
+    if (graph) {
+      return new Segment(
+        graph.getPointById(data.p1)!,
+        graph.getPointById(data.p2)!
+      );
+    }
     return new Segment(
-      graph.getPointById(data.p1)!,
-      graph.getPointById(data.p2)!
+      new Point(data.p1.x, data.p1.y),
+      new Point(data.p2.x, data.p2.y)
     );
   }
 

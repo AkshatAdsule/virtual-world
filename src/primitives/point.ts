@@ -10,7 +10,12 @@ export class Point implements Drawable {
     this.x = x;
     this.y = y;
 
-    this.id = id || crypto.randomUUID();
+    // this.id = id || crypto.randomUUID();
+    if (id) {
+      this.id = id;
+    } else {
+      this.id = crypto.randomUUID();
+    }
   }
 
   get serialized(): object {

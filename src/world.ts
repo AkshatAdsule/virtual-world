@@ -42,7 +42,8 @@ export class World implements Drawable {
     buildingWidth = 150,
     buildingMinLength = 150,
     spacing = 50,
-    treeSize = 160
+    treeSize = 160,
+    generate = true
   ) {
     this.graph = graph;
     this.roadWidth = roadWith;
@@ -54,12 +55,14 @@ export class World implements Drawable {
 
     this.treeSize = treeSize;
 
-    this.generate();
+    if (generate) {
+      this.generate();
+    }
   }
 
   static decode(data: any): World {
     const graph = Graph.decode(data.graph);
-    const world = new World(graph);
+    const world = new World(graph, 0, 0, 0, 0, 0, 0, false);
 
     // primitives
     world.roadWidth = data.roadWidth;
@@ -71,17 +74,13 @@ export class World implements Drawable {
 
     // items
     world.envelopes = data.envelopes.map((e: any) => Envelope.decode(e, graph));
-    world.roadBorders = data.roadBorders.map((s: any) =>
-      Segment.decode(s, graph)
-    );
-    world.buildings = data.buildings.map((b: any) => Building.decode(b, graph));
+    world.roadBorders = data.roadBorders.map((s: any) => Segment.decode(s));
+    world.buildings = data.buildings.map((b: any) => Building.decode(b));
 
     world.trees = data.trees.map((t: any) => Tree.decode(t));
     world.treeSize = data.treeSize;
 
-    world.laneGuides = data.laneGuides.map((s: any) =>
-      Segment.decode(s, graph)
-    );
+    world.laneGuides = data.laneGuides.map((s: any) => Segment.decode(s));
 
     world.markings = data.markings.map((m: any) => decodeMarking(m));
 

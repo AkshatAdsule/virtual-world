@@ -38,7 +38,47 @@ disposeButton.onclick = () => {
 };
 const saveButton = document.getElementById("save")! as HTMLButtonElement;
 saveButton.onclick = () => {
-  window.localStorage.setItem("world", JSON.stringify(world.serialized));
+  const data = { world: world.serialized, viewPort: viewPort.serialized };
+  const element: HTMLAnchorElement = document.createElement("a");
+
+  element.setAttribute(
+    "href",
+    "data:application/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(data))
+  );
+
+  const fileName = "name.world";
+  element.setAttribute("download", fileName);
+
+  element.click();
+
+  window.localStorage.setItem("world", JSON.stringify(data.world));
+  window.localStorage.setItem("viewPort", JSON.stringify(data.viewPort));
+};
+
+const loadButton = document.getElementById("fileInput")! as HTMLSelectElement;
+loadButton.onchange = (event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files![0];
+
+  if (!file) {
+    alert("No file selected");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.readAsText(file);
+
+  reader.onload = (event) => {
+    const content = event.target!.result as string;
+    const json = JSON.parse(content);
+    const { world: worldData, viewPort: viewPortData } = json;
+    world = World.decode(worldData);
+    viewPort = ViewPort.decode(viewPortData, canvas);
+    localStorage.setItem("world", JSON.stringify(world.serialized));
+    localStorage.setItem("viewPort", JSON.stringify(viewPort.serialized));
+    location.reload();
+  };
 };
 
 const graphButton = document.getElementById("graphBtn")! as HTMLButtonElement;
@@ -95,11 +135,17 @@ let world = new World(new Graph());
 if (window.localStorage.getItem("world")) {
   world = World.decode(JSON.parse(window.localStorage.getItem("world")!));
 }
+
+let viewPort = new ViewPort(canvas);
+if (window.localStorage.getItem("viewPort")) {
+  viewPort = ViewPort.decode(
+    JSON.parse(window.localStorage.getItem("viewPort")!),
+    canvas
+  );
+}
 const graph = world.graph;
 
 const ctx = canvas.getContext("2d")!;
-
-const viewPort = new ViewPort(canvas);
 
 const graphEditor = new GraphEditor(graph, viewPort);
 const stopEditor = new StopEditor(viewPort, world);

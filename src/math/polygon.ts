@@ -83,8 +83,13 @@ export class Polygon implements Drawable {
     }
   }
 
-  static decode(data: any, graph: Graph): Polygon {
-    const points = data.points.map((p: any) => graph.getPointById(p)!);
+  static decode(data: any, graph?: Graph): Polygon {
+    let points: Point[] = [];
+    if (graph) {
+      points = data.points.map((p: any) => graph.getPointById(p)!);
+      return new Polygon(points);
+    }
+    points = data.points.map((p: any) => new Point(p.x, p.y));
     return new Polygon(points);
   }
 
